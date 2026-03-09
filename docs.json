@@ -8,6 +8,12 @@
     "dark": "#15803D"
   },
   "favicon": "/favicon.svg",
+  "api": {
+    "playground": {
+      "display": "interactive",
+      "proxy": false
+    }
+  },
   "navigation": {
     "tabs": [
       {
@@ -15,18 +21,11 @@
         "groups": [
           {
             "group": "Getting started",
-            "pages": [
-              "index",
-              "quickstart",
-              "development"
-            ]
+            "pages": ["index", "quickstart", "development"]
           },
           {
             "group": "Customization",
-            "pages": [
-              "essentials/settings",
-              "essentials/navigation"
-            ]
+            "pages": ["essentials/settings", "essentials/navigation"]
           },
           {
             "group": "Writing content",
@@ -48,13 +47,11 @@
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "API reference (example)",
         "groups": [
           {
             "group": "API documentation",
-            "pages": [
-              "api-reference/introduction"
-            ]
+            "pages": ["api-reference/introduction"]
           },
           {
             "group": "Endpoint examples",
@@ -64,6 +61,15 @@
               "api-reference/endpoint/delete",
               "api-reference/endpoint/webhook"
             ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "pages": [
+          {
+            "group": "API Reference",
+            "openapi": "nickel-api-docs.yaml"
           }
         ]
       }
@@ -102,15 +108,15 @@
   },
   "contextual": {
     "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
   },
   "footer": {
     "socials": {

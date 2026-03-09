@@ -18,27 +18,27 @@ servers:
 - url: https://rest.nickel.com
 - url: https://rest.staging.nickel.com
 tags:
-- name: payment
+- name: Payment
   description: Payments from your customers to you
-- name: disbursement
+- name: Disbursement
   description: Payouts made from Nickel to you
-- name: paymentLink
+- name: Payment Link
   description: A request for payment against an invoice
-- name: customer
+- name: Customer
   description: A customer record to request payments against
-- name: attachment
+- name: Attachment
   description: Attachments on a payment link
-- name: chargeAuthorization
+- name: Charge Authorization
   description: An authorization for your customer to allow you to charge their payment method directly
-- name: webhook
+- name: Webhook
   description: Create a webhook for nickel to send updates to
-- name: file
+- name: File
   description: A file you can use to attach to invoices or debit authorizations
 paths:
   /file:
     post:
       tags:
-      - file
+      - File
       summary: Upload a file
       description: Upload a file
       operationId: uploadFile
@@ -58,7 +58,7 @@ paths:
   /webhook:
     get:
       tags:
-      - webhook
+      - Webhook
       summary: Get webhooks
       description: Get webhooks
       operationId: getWebhooks
@@ -83,7 +83,7 @@ paths:
                 $ref: "#/components/schemas/Error"
     post:
       tags:
-      - webhook
+      - Webhook
       summary: Create a webhook
       description: Create a webhook
       operationId: createWebhook
@@ -116,7 +116,7 @@ paths:
   /paymentLink:
     post:
       tags:
-      - paymentLink
+      - Payment Link
       summary: Create a new payment link
       description: Create a new payment link
       operationId: addPaymentLink
@@ -147,7 +147,7 @@ paths:
   /paymentLink/{paymentLinkId}:
     get:
       tags:
-      - paymentLink
+      - Payment Link
       summary: Find a payment link by id
       description: Returns a single payment link
       operationId: getPaymentLinkById
@@ -177,7 +177,7 @@ paths:
                 $ref: "#/components/schemas/Error"
     put:
       tags:
-      - paymentLink
+      - Payment Link
       summary: Update an existing payment link.
       description: Update an existing payment link by id.
       operationId: updatePaymentLink
@@ -216,7 +216,7 @@ paths:
                 $ref: "#/components/schemas/Error"
     delete:
       tags:
-      - paymentLink
+      - Payment Link
       summary: Deletes a payment link.
       description: Delete a payment link.
       operationId: deletePaymentLink
@@ -247,7 +247,7 @@ paths:
   /paymentLink/{paymentLinkId}/uploadPdf:
     post:
       tags:
-      - paymentLink
+      - Payment Link
       summary: Uploads a pdf to a payment link.
       description: Upload pdf of a payment link.
       operationId: uploadFileToPaymentLink
@@ -284,7 +284,7 @@ paths:
   /paymentLink/customer/{customerId}:
     get:
       tags:
-      - paymentLink
+      - Payment Link
       summary: Return payment links by customerId
       description: Returns a list of all payment links by Id
       operationId: getPaymentLinksByCustomerId
@@ -305,7 +305,7 @@ paths:
   /attachment/{attachmentId}:
     delete:
       tags:
-      - attachment
+      - Attachment
       summary: Deletes an attachment on a payment link.
       description: Delete an attachment.
       operationId: deleteAttachment
@@ -330,7 +330,7 @@ paths:
   /payment/{paymentId}:
     get:
       tags:
-      - payment
+      - Payment
       summary: Returns a payment by id
       description: Returns a payment by id
       operationId: getPayment
@@ -357,7 +357,7 @@ paths:
   /disbursement/{disbursementId}:
     get:
       tags:
-      - disbursement
+      - Disbursement
       summary: Returns a disbursement by id
       description: Returns a disbursement by id
       operationId: getDisbursement
@@ -384,7 +384,7 @@ paths:
   /customer:
     put:
       tags:
-      - customer
+      - Customer
       summary: Update a customer
       description: Update an existing customer
       operationId: updateCustomer
@@ -416,7 +416,7 @@ paths:
                 $ref: "#/components/schemas/Error"
     post:
       tags:
-      - customer
+      - Customer
       summary: Create a customer
       description: Create a customer
       operationId: addCustomer
@@ -447,7 +447,7 @@ paths:
   /customer/{customerId}:
     get:
       tags:
-      - customer
+      - Customer
       summary: Find a customer by id
       description: Find a customer by id
       operationId: getCustomerById
@@ -478,7 +478,7 @@ paths:
   /customer/findByEmail:
     get:
       tags:
-      - customer
+      - Customer
       summary: Find a customer by email
       description: Find a customer by email
       operationId: getCustomerByEmail
@@ -510,7 +510,7 @@ paths:
   /customer/{customerId}/uploadACHDebitAuthorizationPdf:
     post:
       tags:
-      - customer
+      - Customer
       summary: Upload an ACH Debit Authorization PDF
       description: Upload an ACH Debit Authorization PDF
       operationId: Upload ACH Debit Authorization PDF
@@ -547,7 +547,7 @@ paths:
   /customer/{customerId}/requestChargeAuthorization:
     post:
       tags:
-      - customer
+      - Customer
       summary: Request  charge authorization from a customer
       description: Request charge authorization from a customer
       operationId: requestchargeAuthorizationFromCustomer
@@ -584,7 +584,7 @@ paths:
   /chargeAuthorization/{chargeAuthorizationId}:
     get:
       tags:
-      - chargeAuthorization
+      - Charge Authorization
       summary: Returns a charge authorization by id
       description: Returns a charge authorization by id
       operationId: getChargeAuthorization
@@ -611,7 +611,7 @@ paths:
   /chargeAuthorization/pay:
     post:
       tags:
-      - chargeAuthorization
+      - Charge Authorization
       summary: Make payments using charge authorizations
       description: Process payments for one or more payment links across multiple charge authorizations in a single request.
       operationId: payWithChargeAuthorization
