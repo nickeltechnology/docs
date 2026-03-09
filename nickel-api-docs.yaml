@@ -13,32 +13,32 @@ externalDocs:
   description: Find out more about Nickel
   url: https://getnickel.com
 servers:
-- url: https://virtserver.swaggerhub.com/nickel-ace/apiv1/1.0.0
-  description: SwaggerHub API Auto Mocking
-- url: https://rest.nickel.com
-- url: https://rest.staging.nickel.com
+  - url: https://virtserver.swaggerhub.com/nickel-ace/apiv1/1.0.0
+    description: SwaggerHub API Auto Mocking
+  - url: https://rest.nickel.com
+  - url: https://rest.staging.nickel.com
 tags:
-- name: Payment
-  description: Payments from your customers to you
-- name: Disbursement
-  description: Payouts made from Nickel to you
-- name: Payment Link
-  description: A request for payment against an invoice
-- name: Customer
-  description: A customer record to request payments against
-- name: Attachment
-  description: Attachments on a payment link
-- name: Charge Authorization
-  description: An authorization for your customer to allow you to charge their payment method directly
-- name: Webhook
-  description: Create a webhook for nickel to send updates to
-- name: File
-  description: A file you can use to attach to invoices or debit authorizations
+  - name: Payment
+    description: Payments from your customers to you
+  - name: Disbursement
+    description: Payouts made from Nickel to you
+  - name: Payment Link
+    description: A request for payment against an invoice
+  - name: Customer
+    description: A customer record to request payments against
+  - name: Attachment
+    description: Attachments on a payment link
+  - name: Charge Authorization
+    description: An authorization for your customer to allow you to charge their payment method directly
+  - name: Webhook
+    description: Create a webhook for nickel to send updates to
+  - name: File
+    description: A file you can use to attach to invoices or debit authorizations
 paths:
   /file:
     post:
       tags:
-      - File
+        - File
       summary: Upload a file
       operationId: uploadFile
       requestBody:
@@ -57,7 +57,7 @@ paths:
   /webhook:
     get:
       tags:
-      - Webhook
+        - Webhook
       summary: Get webhooks
       operationId: getWebhooks
       responses:
@@ -81,7 +81,7 @@ paths:
                 $ref: "#/components/schemas/Error"
     post:
       tags:
-      - Webhook
+        - Webhook
       summary: Create a webhook
       operationId: createWebhook
       requestBody:
@@ -113,7 +113,7 @@ paths:
   /paymentLink:
     post:
       tags:
-      - Payment Link
+        - Payment Link
       summary: Create a new payment link
       operationId: addPaymentLink
       requestBody:
@@ -143,16 +143,16 @@ paths:
   /paymentLink/{paymentLinkId}:
     get:
       tags:
-      - Payment Link
+        - Payment Link
       summary: Find a payment link by id
       operationId: getPaymentLinkById
       parameters:
-      - name: paymentLinkId
-        in: path
-        description: ID of paymentLink to return
-        required: true
-        schema:
-          type: string
+        - name: paymentLinkId
+          in: path
+          description: ID of paymentLink to return
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: Successful operation
@@ -172,16 +172,16 @@ paths:
                 $ref: "#/components/schemas/Error"
     put:
       tags:
-      - Payment Link
+        - Payment Link
       summary: Update an existing payment link.
       operationId: updatePaymentLink
       parameters:
-      - name: paymentLinkId
-        in: path
-        description: ID of paymentLink to return
-        required: true
-        schema:
-          type: string
+        - name: paymentLinkId
+          in: path
+          description: ID of paymentLink to return
+          required: true
+          schema:
+            type: string
       requestBody:
         description: Update an existing payment link.
         content:
@@ -210,22 +210,22 @@ paths:
                 $ref: "#/components/schemas/Error"
     delete:
       tags:
-      - Payment Link
+        - Payment Link
       summary: Deletes a payment link.
       operationId: deletePaymentLink
       parameters:
-      - name: api_key
-        in: header
-        description: ""
-        required: false
-        schema:
-          type: string
-      - name: paymentLinkId
-        in: path
-        description: Payment link id to delete
-        required: true
-        schema:
-          type: string
+        - name: api_key
+          in: header
+          description: ""
+          required: false
+          schema:
+            type: string
+        - name: paymentLinkId
+          in: path
+          description: Payment link id to delete
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: Paymentlink deleted
@@ -240,16 +240,16 @@ paths:
   /paymentLink/{paymentLinkId}/uploadPdf:
     post:
       tags:
-      - Payment Link
+        - Payment Link
       summary: Uploads a pdf to a payment link.
       operationId: uploadFileToPaymentLink
       parameters:
-      - name: paymentLinkId
-        in: path
-        description: ID of payment link to update
-        required: true
-        schema:
-          type: string
+        - name: paymentLinkId
+          in: path
+          description: ID of payment link to update
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -276,16 +276,16 @@ paths:
   /paymentLink/customer/{customerId}:
     get:
       tags:
-      - Payment Link
+        - Payment Link
       summary: Return payment links by customerId
       operationId: getPaymentLinksByCustomerId
       parameters:
-      - name: customerId
-        in: path
-        description: ID of the customer
-        required: true
-        schema:
-          type: string
+        - name: customerId
+          in: path
+          description: ID of the customer
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: Successful operation
@@ -296,16 +296,16 @@ paths:
   /attachment/{attachmentId}:
     delete:
       tags:
-      - Attachment
+        - Attachment
       summary: Deletes an attachment on a payment link.
       operationId: deleteAttachment
       parameters:
-      - name: attachmentId
-        in: path
-        description: Attachment to delete
-        required: true
-        schema:
-          type: string
+        - name: attachmentId
+          in: path
+          description: Attachment to delete
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: Attachment deleted
@@ -320,16 +320,16 @@ paths:
   /payment/{paymentId}:
     get:
       tags:
-      - Payment
+        - Payment
       summary: Returns a payment by id
       operationId: getPayment
       parameters:
-      - name: paymentId
-        in: path
-        description: ID of the payment
-        required: true
-        schema:
-          type: string
+        - name: paymentId
+          in: path
+          description: ID of the payment
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: Successful operation
@@ -346,16 +346,16 @@ paths:
   /disbursement/{disbursementId}:
     get:
       tags:
-      - Disbursement
+        - Disbursement
       summary: Returns a disbursement by id
       operationId: getDisbursement
       parameters:
-      - name: disbursementId
-        in: path
-        description: ID of the disbursement
-        required: true
-        schema:
-          type: string
+        - name: disbursementId
+          in: path
+          description: ID of the disbursement
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: Successful operation
@@ -372,7 +372,7 @@ paths:
   /customer:
     put:
       tags:
-      - Customer
+        - Customer
       summary: Update a customer
       operationId: updateCustomer
       requestBody:
@@ -403,7 +403,7 @@ paths:
                 $ref: "#/components/schemas/Error"
     post:
       tags:
-      - Customer
+        - Customer
       summary: Create a customer
       operationId: addCustomer
       requestBody:
@@ -433,16 +433,16 @@ paths:
   /customer/{customerId}:
     get:
       tags:
-      - Customer
+        - Customer
       summary: Find a customer by id
       operationId: getCustomerById
       parameters:
-      - name: customerId
-        in: path
-        description: ID of the customer that needs to be fetched
-        required: true
-        schema:
-          type: string
+        - name: customerId
+          in: path
+          description: ID of the customer that needs to be fetched
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: Successful operation
@@ -463,17 +463,17 @@ paths:
   /customer/findByEmail:
     get:
       tags:
-      - Customer
+        - Customer
       summary: Find a customer by email
       operationId: getCustomerByEmail
       parameters:
-      - name: email
-        in: query
-        description: Email that will be used to query the customer
-        required: false
-        explode: true
-        schema:
-          type: string
+        - name: email
+          in: query
+          description: Email that will be used to query the customer
+          required: false
+          explode: true
+          schema:
+            type: string
       responses:
         "200":
           description: Successful operation
@@ -494,16 +494,16 @@ paths:
   /customer/{customerId}/uploadACHDebitAuthorizationPdf:
     post:
       tags:
-      - Customer
+        - Customer
       summary: Upload an ACH Debit Authorization PDF
       operationId: Upload ACH Debit Authorization PDF
       parameters:
-      - name: customerId
-        in: path
-        description: ID of the customer that needs to be fetched
-        required: true
-        schema:
-          type: string
+        - name: customerId
+          in: path
+          description: ID of the customer that needs to be fetched
+          required: true
+          schema:
+            type: string
       requestBody:
         description: Create a new customer
         content:
@@ -530,16 +530,16 @@ paths:
   /customer/{customerId}/requestChargeAuthorization:
     post:
       tags:
-      - Customer
+        - Customer
       summary: Request  charge authorization from a customer
       operationId: requestchargeAuthorizationFromCustomer
       parameters:
-      - name: customerId
-        in: path
-        description: ID of the customer that needs to be fetched
-        required: true
-        schema:
-          type: string
+        - name: customerId
+          in: path
+          description: ID of the customer that needs to be fetched
+          required: true
+          schema:
+            type: string
       requestBody:
         description: Create a new customer
         content:
@@ -566,16 +566,16 @@ paths:
   /chargeAuthorization/{chargeAuthorizationId}:
     get:
       tags:
-      - Charge Authorization
+        - Charge Authorization
       summary: Returns a charge authorization by id
       operationId: getChargeAuthorization
       parameters:
-      - name: chargeAuthorizationId
-        in: path
-        description: Charge authorization id
-        required: true
-        schema:
-          type: string
+        - name: chargeAuthorizationId
+          in: path
+          description: Charge authorization id
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: Successful operation
@@ -592,7 +592,7 @@ paths:
   /chargeAuthorization/pay:
     post:
       tags:
-      - Charge Authorization
+        - Charge Authorization
       summary: Make payments using charge authorizations
       description: Process payments for one or more payment links across multiple charge authorizations in a single request.
       operationId: payWithChargeAuthorization
@@ -759,8 +759,8 @@ components:
         type:
           type: string
           enum:
-          - ACH
-          - Card
+            - ACH
+            - Card
         achDetails:
           $ref: "#/components/schemas/ACHDetails"
         cardDetails:
@@ -769,10 +769,10 @@ components:
           $ref: "#/components/schemas/BillingDetails"
     DebitAuthorizationUploadPDFRequest:
       required:
-      - accountNumber
-      - accountType
-      - fileId
-      - routingNumber
+        - accountNumber
+        - accountType
+        - fileId
+        - routingNumber
       type: object
       properties:
         routingNumber:
@@ -782,8 +782,8 @@ components:
         accountType:
           type: string
           enum:
-          - checking
-          - savings
+            - checking
+            - savings
         fileId:
           type: string
         memo:
@@ -830,7 +830,7 @@ components:
           type: boolean
     ChargeAuthorizationPaymentInput:
       required:
-      - paymentLinkId
+        - paymentLinkId
       type: object
       properties:
         paymentLinkId:
@@ -845,8 +845,8 @@ components:
           description: "Amount to charge in cents. If omitted, charges the remaining balance on the invoice."
     ChargeAuthorizationPayment:
       required:
-      - chargeAuthorizationId
-      - paymentLinks
+        - chargeAuthorizationId
+        - paymentLinks
       type: object
       properties:
         chargeAuthorizationId:
@@ -892,8 +892,8 @@ components:
           type: string
     Customer:
       required:
-      - email
-      - name
+        - email
+        - name
       type: object
       properties:
         id:
@@ -912,8 +912,8 @@ components:
           example: claudio@getnickel.com
     PaymentLinkCreateRequest:
       required:
-      - customerId
-      - name
+        - customerId
+        - name
       type: object
       properties:
         requestedAmountCents:
@@ -930,8 +930,8 @@ components:
           type: string
     Webhook:
       required:
-      - id
-      - url
+        - id
+        - url
       type: object
       properties:
         url:
@@ -940,7 +940,7 @@ components:
           type: string
     WebhookCreateRequest:
       required:
-      - url
+        - url
       type: object
       properties:
         url:
@@ -959,10 +959,10 @@ components:
           format: date
     File:
       required:
-      - createdAt
-      - id
-      - key
-      - type
+        - createdAt
+        - id
+        - key
+        - type
       type: object
       properties:
         id:
@@ -972,15 +972,15 @@ components:
         type:
           type: string
           enum:
-          - ACH_DEBIT_AUTHORIZATION_PDF
-          - INVOICE_PDF
+            - ACH_DEBIT_AUTHORIZATION_PDF
+            - INVOICE_PDF
         createdAt:
           type: string
           format: date-time
     PaymentLink:
       required:
-      - customerId
-      - name
+        - customerId
+        - name
       type: object
       properties:
         id:
@@ -1027,8 +1027,8 @@ components:
         name: "##default"
     Error:
       required:
-      - code
-      - message
+        - code
+        - message
       type: object
       properties:
         code:
@@ -1044,8 +1044,8 @@ components:
         type:
           type: string
           enum:
-          - ACH_DEBIT_AUTHORIZATION_PDF
-          - INVOICE_PDF
+            - ACH_DEBIT_AUTHORIZATION_PDF
+            - INVOICE_PDF
     inline_response_200:
       type: object
       properties:
@@ -1067,7 +1067,7 @@ components:
             type: string
     chargeAuthorization_pay_body:
       required:
-      - payments
+        - payments
       type: object
       properties:
         payments:

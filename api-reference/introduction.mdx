@@ -1,33 +1,41 @@
 ---
 title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+description: 'Learn the basics of the Nickel API'
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+## API Reference
 
-## Welcome
+The Nickel API is organized around [REST](https://en.wikipedia.org/wiki/REST). Our API has predictable resource-oriented URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+## Authorization and Testing
 
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
+The Nickel API uses [Bearer Authentication](https://datatracker.ietf.org/doc/html/rfc6750). You will be provided with a pair of [API keys](https://dashboard.increase.com/login?redirect=developers%2Fapi_keys): one for production and one for sandbox testing.
 
-## Authentication
+| Environment | Base URL |
+| --- | --- |
+| Production | `https://rest.nickel.com` |
+| Sandbox | `https://rest.staging.nickel.com` |
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+Include your API key in the `Authorization` header of every request:
 
-```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
 ```
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Requests and Responses
+
+For `POST` requests, set the `Content-Type` header to `application/json` and pass parameters in the JSON request body.
+
+For `GET` requests, pass parameters as query string parameters in the URL.
+
+All API responses return `application/json`.
+
+## Errors
+
+The Nickel API uses standard HTTP response codes to indicate the success or failure of a request.
+
+- **2xx** — Success
+- **4xx** — Client error (invalid request, authentication failure, etc.)
+- **5xx** — Server error
+
+Error response objects conform to [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) (Problem Details for HTTP APIs). Each error is distinguished by a `type` attribute and follows a consistent shape.

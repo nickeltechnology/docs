@@ -1,0 +1,30 @@
+---
+title: 'Payments'
+description: 'Understand how payments work in Nickel'
+---
+
+A payment represents a transaction between your customer for goods and services. Currently, Nickel supports either credit card, debit card or ACH payments. After a payment is made, Nickel sends the funds from the payment to your payout method on file depending on your Nickel plan as well as the payment method used.
+
+## Refunds
+
+Payments can either be partially, or fully refunded. Credit card payments and ACH payments can be voided (essentially the money movement will be cancelled) within a few hours or minutes of the transaction happening. A voided payment will incur no fees. If a credit card payment is refunded, since the card was already charged and the processing fee has already been incurred, the fee on the payment will still apply. Nickel sends webhooks for both a payment being refunded, `payment.refunded` or voided — `payment.voided`.
+
+## Statuses
+
+There are four payment statuses in Nickel: `PENDING`, `SUCCEEDED`, `FAILED`, `REFUNDED`.
+
+### PENDING
+
+This status exists only for payments where the payment method is ACH. A payment is in `PENDING` once Nickel has initiated the debit to your customer's bank account but has not yet received the funds for the payment. When an ACH payment is in `PENDING`, it will eventually move towards `SUCCEEDED`. In rare circumstances the payment can move to `FAILED` from `PENDING`.
+
+### SUCCEEDED
+
+Credit card payments are automatically in this state because we get synchronous confirmation from the card networks that the card has been charged. In contrast, ACH payments move to `SUCCEEDED` after Nickel receives the funds from your customer's bank. However since an ACH debit can get returned up to 60 days from the initial transaction, ACH payments that are in this state can still move to the `FAILED` state if an [ACH return](https://www.nickel.com/ach-return-codes) occurs.
+
+### FAILED
+
+This state exists for ACH payments where an ACH return has occurred which means that the transaction was returned by the customer's bank. If an ACH payment was paid out and a return occurs, a debit will be initiated for the return amount. If an ACH payment has not yet been paid out and a return occurs, then the ACH payment won't be paid out.
+
+### REFUNDED
+
+If you initiate a refund on a payment, no matter the amount, the payment moves into this state. A payment can only be `REFUNDED` if it is in the `COMPLETED` state.

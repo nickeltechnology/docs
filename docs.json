@@ -10,8 +10,7 @@
   "favicon": "/favicon.svg",
   "api": {
     "playground": {
-      "display": "interactive",
-      "proxy": false
+      "display": "interactive"
     }
   },
   "navigation": {
@@ -47,29 +46,15 @@
         ]
       },
       {
-        "tab": "API reference (example)",
+        "tab": "API Reference",
         "groups": [
           {
-            "group": "API documentation",
-            "pages": ["api-reference/introduction"]
+            "group": "Getting Started",
+            "pages": ["api-reference/introduction", "api-reference/payments", "api-reference/webhooks"]
           },
           {
-            "group": "Endpoint examples",
-            "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API Reference",
-        "pages": [
-          {
             "group": "API Reference",
-            "openapi": "nickel-api-docs.yaml"
+            "openapi": "/nickel-api-docs.yaml"
           }
         ]
       }

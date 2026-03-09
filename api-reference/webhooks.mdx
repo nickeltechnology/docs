@@ -1,0 +1,61 @@
+---
+title: 'Webhooks'
+description: 'Receive notifications when events happen in your Nickel account'
+---
+
+Webhooks are the primary way that Nickel tells your application that something has happened. In order to receive webhooks, you need to create a Webhook subscription by navigating to the [webhooks portion](https://app.getnickel.com/dashboard/settings/webhooks) of your dashboard. Once you specify a webhook URL, Nickel will then send updates to the endpoint whenever something happens against your Nickel account.
+
+## Webhook Structure
+
+The webhook currently has the following structure:
+
+```json
+{
+  "id": "event_123abc",
+  "created_at": "2020-01-31T23:59:59Z",
+  "category": "disbursement.pending",
+  "associated_object_type": "disbursement",
+  "associated_object_id": "clrv6k8y80003wq02x36efjnv",
+  "type": "event"
+}
+```
+
+## Categories
+
+Nickel currently supports the following webhook notifications:
+
+### payment.made
+
+This notification fires when a payment is made.
+
+### payment.failed
+
+This notification fires when a payment has failed, such as when an ACH return occurs.
+
+### payment.refunded
+
+This notification fires when a payment has been refunded.
+
+### payment.voided
+
+This notification fires when a payment has been refunded, but it has not yet been sent to the ACH network or submitted for settlement to the card networks and thus was effectively canceled.
+
+### disbursement.pending
+
+This notification fires whenever a disbursement is created and is set to be sent out to your bank account on file.
+
+### disbursement.succeeded
+
+This notification fires whenever the receiving bank receives the funds. This may not necessarily be the same time as it appears in your bank account depending on your bank's turnaround time.
+
+### charge_authorization.authorized
+
+This notification fires whenever your customer authorizes a payment method to be charged by you.
+
+### charge_authorization.deleted
+
+This notification fires whenever your customer or you delete an authorization to charge a payment method on file.
+
+## Consuming Events
+
+Individual Events don't contain very much information on their own. This is by design, as the API structure can remain extremely stable and avoid difficult webhook migrations in the future as the Nickel API changes. If you need additional metadata, such as the amount of the Disbursement in the above example, make a `GET` request to the API for that information. You can use the `associated_object_type` or `category` fields to determine what resource to fetch from the API.
