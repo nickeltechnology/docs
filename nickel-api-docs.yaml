@@ -1,0 +1,1114 @@
+openapi: 3.0.4
+info:
+  title: Nickel API
+  description: "This is the specification for the Nickel Rest API. The API lets you programatically interact with the Nickel server. It uses resource oriented URLs, accepts and returns JSON encoded payloads and uses standard HTTP response codes. It is not a direct API to move money, but instead allows you to interact with Nickel as you would on a web interface."
+  termsOfService: https://www.getnickel.com/terms-of-service
+  contact:
+    email: api-support@getnickel.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Nickel
+  url: https://getnickel.com
+servers:
+- url: https://virtserver.swaggerhub.com/nickel-ace/apiv1/1.0.0
+  description: SwaggerHub API Auto Mocking
+- url: https://rest.nickel.com
+- url: https://rest.staging.nickel.com
+tags:
+- name: payment
+  description: Payments from your customers to you
+- name: disbursement
+  description: Payouts made from Nickel to you
+- name: paymentLink
+  description: A request for payment against an invoice
+- name: customer
+  description: A customer record to request payments against
+- name: attachment
+  description: Attachments on a payment link
+- name: chargeAuthorization
+  description: An authorization for your customer to allow you to charge their payment method directly
+- name: webhook
+  description: Create a webhook for nickel to send updates to
+- name: file
+  description: A file you can use to attach to invoices or debit authorizations
+paths:
+  /file:
+    post:
+      tags:
+      - file
+      summary: Upload a file
+      description: Upload a file
+      operationId: uploadFile
+      requestBody:
+        description: File Upload
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/file_body"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/File"
+  /webhook:
+    get:
+      tags:
+      - webhook
+      summary: Get webhooks
+      description: Get webhooks
+      operationId: getWebhooks
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_200"
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Payment link not found
+        "422":
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      tags:
+      - webhook
+      summary: Create a webhook
+      description: Create a webhook
+      operationId: createWebhook
+      requestBody:
+        description: Create a webhook
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WebhookCreateRequest"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Webhook"
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Payment link not found
+        "422":
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /paymentLink:
+    post:
+      tags:
+      - paymentLink
+      summary: Create a new payment link
+      description: Create a new payment link
+      operationId: addPaymentLink
+      requestBody:
+        description: Create a new payment link
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PaymentLinkCreateRequest"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentLink"
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /paymentLink/{paymentLinkId}:
+    get:
+      tags:
+      - paymentLink
+      summary: Find a payment link by id
+      description: Returns a single payment link
+      operationId: getPaymentLinkById
+      parameters:
+      - name: paymentLinkId
+        in: path
+        description: ID of paymentLink to return
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentLink"
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: PaymentLink not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      tags:
+      - paymentLink
+      summary: Update an existing payment link.
+      description: Update an existing payment link by id.
+      operationId: updatePaymentLink
+      parameters:
+      - name: paymentLinkId
+        in: path
+        description: ID of paymentLink to return
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Update an existing payment link.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PaymentLinkUpdateRequest"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentLink"
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Payment link not found
+        "422":
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      tags:
+      - paymentLink
+      summary: Deletes a payment link.
+      description: Delete a payment link.
+      operationId: deletePaymentLink
+      parameters:
+      - name: api_key
+        in: header
+        description: ""
+        required: false
+        schema:
+          type: string
+      - name: paymentLinkId
+        in: path
+        description: Payment link id to delete
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Paymentlink deleted
+        "400":
+          description: Invalid payment link value
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /paymentLink/{paymentLinkId}/uploadPdf:
+    post:
+      tags:
+      - paymentLink
+      summary: Uploads a pdf to a payment link.
+      description: Upload pdf of a payment link.
+      operationId: uploadFileToPaymentLink
+      parameters:
+      - name: paymentLinkId
+        in: path
+        description: ID of payment link to update
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/paymentLinkId_uploadPdf_body"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+        "400":
+          description: No file uploaded
+        "404":
+          description: Payment link not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /paymentLink/customer/{customerId}:
+    get:
+      tags:
+      - paymentLink
+      summary: Return payment links by customerId
+      description: Returns a list of all payment links by Id
+      operationId: getPaymentLinksByCustomerId
+      parameters:
+      - name: customerId
+        in: path
+        description: ID of the customer
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_200_1"
+  /attachment/{attachmentId}:
+    delete:
+      tags:
+      - attachment
+      summary: Deletes an attachment on a payment link.
+      description: Delete an attachment.
+      operationId: deleteAttachment
+      parameters:
+      - name: attachmentId
+        in: path
+        description: Attachment to delete
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Attachment deleted
+        "400":
+          description: Invalid payment link value
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /payment/{paymentId}:
+    get:
+      tags:
+      - payment
+      summary: Returns a payment by id
+      description: Returns a payment by id
+      operationId: getPayment
+      parameters:
+      - name: paymentId
+        in: path
+        description: ID of the payment
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Payment"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /disbursement/{disbursementId}:
+    get:
+      tags:
+      - disbursement
+      summary: Returns a disbursement by id
+      description: Returns a disbursement by id
+      operationId: getDisbursement
+      parameters:
+      - name: disbursementId
+        in: path
+        description: ID of the disbursement
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Disbursement"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /customer:
+    put:
+      tags:
+      - customer
+      summary: Update a customer
+      description: Update an existing customer
+      operationId: updateCustomer
+      requestBody:
+        description: Update an existing customer
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Customer"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Payment link not found
+        "422":
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      tags:
+      - customer
+      summary: Create a customer
+      description: Create a customer
+      operationId: addCustomer
+      requestBody:
+        description: Create a new customer
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Customer"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentLink"
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /customer/{customerId}:
+    get:
+      tags:
+      - customer
+      summary: Find a customer by id
+      description: Find a customer by id
+      operationId: getCustomerById
+      parameters:
+      - name: customerId
+        in: path
+        description: ID of the customer that needs to be fetched
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /customer/findByEmail:
+    get:
+      tags:
+      - customer
+      summary: Find a customer by email
+      description: Find a customer by email
+      operationId: getCustomerByEmail
+      parameters:
+      - name: email
+        in: query
+        description: Email that will be used to query the customer
+        required: false
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /customer/{customerId}/uploadACHDebitAuthorizationPdf:
+    post:
+      tags:
+      - customer
+      summary: Upload an ACH Debit Authorization PDF
+      description: Upload an ACH Debit Authorization PDF
+      operationId: Upload ACH Debit Authorization PDF
+      parameters:
+      - name: customerId
+        in: path
+        description: ID of the customer that needs to be fetched
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Create a new customer
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DebitAuthorizationUploadPDFRequest"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChargeAuthorization"
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /customer/{customerId}/requestChargeAuthorization:
+    post:
+      tags:
+      - customer
+      summary: Request  charge authorization from a customer
+      description: Request charge authorization from a customer
+      operationId: requestchargeAuthorizationFromCustomer
+      parameters:
+      - name: customerId
+        in: path
+        description: ID of the customer that needs to be fetched
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Create a new customer
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChargeAuthorizationCreateRequest"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChargeAuthorization"
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /chargeAuthorization/{chargeAuthorizationId}:
+    get:
+      tags:
+      - chargeAuthorization
+      summary: Returns a charge authorization by id
+      description: Returns a charge authorization by id
+      operationId: getChargeAuthorization
+      parameters:
+      - name: chargeAuthorizationId
+        in: path
+        description: Charge authorization id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChargeAuthorization"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /chargeAuthorization/pay:
+    post:
+      tags:
+      - chargeAuthorization
+      summary: Make payments using charge authorizations
+      description: Process payments for one or more payment links across multiple charge authorizations in a single request.
+      operationId: payWithChargeAuthorization
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/chargeAuthorization_pay_body"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/inline_response_200_2"
+        "400":
+          description: Invalid input
+        "422":
+          description: Validation exception
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    Attachment:
+      type: object
+      properties:
+        id:
+          type: string
+        url:
+          type: string
+    Fee:
+      type: object
+      properties:
+        feeType:
+          type: string
+          example: Credit Card Fee
+        amountCents:
+          type: integer
+          format: int64
+          example: 290
+    Refund:
+      type: object
+      properties:
+        id:
+          type: string
+        amountCents:
+          type: integer
+          format: int64
+          example: 515
+        refundDate:
+          type: string
+          format: date
+        void:
+          type: boolean
+    Disbursement:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          example: PENDING
+        amountInCents:
+          type: integer
+          format: int64
+          example: 10000
+        bankName:
+          type: string
+          example: JP Morgan Chase
+        accountNumberLastFour:
+          type: string
+        paymentIds:
+          type: array
+          items:
+            type: string
+            example: clkqzo2y1000cx9tfohoiodq1
+    Payment:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          example: SUCCEEDED
+        fees:
+          type: array
+          items:
+            $ref: "#/components/schemas/Fee"
+        amountInCents:
+          type: integer
+          format: int64
+          example: 10000
+        chargedAmountInCents:
+          type: integer
+          format: int64
+          example: 10290
+        platformFeeInCents:
+          type: integer
+          format: int64
+          example: 290
+        paymentLinkId:
+          type: string
+        paymentMethod:
+          $ref: "#/components/schemas/PaymentMethod"
+        disbursement:
+          $ref: "#/components/schemas/Disbursement"
+        refunds:
+          type: array
+          items:
+            $ref: "#/components/schemas/Refund"
+    ACHDetails:
+      type: object
+      properties:
+        bankName:
+          type: string
+          example: JP Morgan Chase
+        routingNumber:
+          type: string
+        accountNumberLastFour:
+          type: string
+    CardDetails:
+      type: object
+      properties:
+        brand:
+          type: string
+          example: visa
+        last4:
+          type: string
+        holderName:
+          type: string
+        expMonth:
+          type: string
+          example: "2"
+        expYear:
+          type: string
+          example: "2030"
+    BillingDetails:
+      type: object
+      properties:
+        name:
+          type: string
+        companyName:
+          type: string
+        street:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        zip:
+          type: string
+        countryCode:
+          type: string
+    PaymentMethod:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - ACH
+          - Card
+        achDetails:
+          $ref: "#/components/schemas/ACHDetails"
+        cardDetails:
+          $ref: "#/components/schemas/CardDetails"
+        billingDetails:
+          $ref: "#/components/schemas/BillingDetails"
+    DebitAuthorizationUploadPDFRequest:
+      required:
+      - accountNumber
+      - accountType
+      - fileId
+      - routingNumber
+      type: object
+      properties:
+        routingNumber:
+          type: string
+        accountNumber:
+          type: string
+        accountType:
+          type: string
+          enum:
+          - checking
+          - savings
+        fileId:
+          type: string
+        memo:
+          type: string
+        transactionLimitCents:
+          type: integer
+          format: int64
+        expirationDate:
+          type: string
+          format: date
+    ChargeAuthorizationCreateRequest:
+      type: object
+      properties:
+        emails:
+          type: array
+          items:
+            type: string
+        memo:
+          type: string
+        sendEmail:
+          type: boolean
+        transactionLimitCents:
+          type: integer
+          format: int64
+        expirationDate:
+          type: string
+          format: date
+    ChargeAuthorization:
+      type: object
+      properties:
+        id:
+          type: string
+        customerId:
+          type: string
+        paymentMethod:
+          $ref: "#/components/schemas/PaymentMethod"
+        transactionLimitCents:
+          type: integer
+          format: int64
+        expirationDate:
+          type: string
+          format: date
+        active:
+          type: boolean
+    ChargeAuthorizationPaymentInput:
+      required:
+      - paymentLinkId
+      type: object
+      properties:
+        paymentLinkId:
+          type: string
+          description: ID of the payment link to pay
+        withdrawalDate:
+          type: string
+          description: "Schedule the payment for a future date (YYYY-MM-DD). If omitted, the payment is processed immediately. Date must be today or later."
+          format: date
+        amountCents:
+          type: integer
+          description: "Amount to charge in cents. If omitted, charges the remaining balance on the invoice."
+    ChargeAuthorizationPayment:
+      required:
+      - chargeAuthorizationId
+      - paymentLinks
+      type: object
+      properties:
+        chargeAuthorizationId:
+          type: string
+          description: ID of the charge authorization to use for payment
+        paymentLinks:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChargeAuthorizationPaymentInput"
+    ChargeAuthorizationPaymentResult:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+        url:
+          type: string
+        dueDate:
+          type: string
+          nullable: true
+        customerId:
+          type: string
+        requestedAmountCents:
+          type: integer
+        completedAmountCents:
+          type: integer
+        paymentId:
+          type: string
+          description: ID of the payment created for this invoice
+          nullable: true
+    ChargeAuthorizationPaymentError:
+      type: object
+      properties:
+        paymentLinkId:
+          type: string
+        paymentLinkName:
+          type: string
+          nullable: true
+        error:
+          type: string
+    Customer:
+      required:
+      - email
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          example: clkqzo2y1000cx9tfohoiodq1
+        name:
+          type: string
+          example: Claudio Wilson
+        chargeAuthorizations:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChargeAuthorization"
+        email:
+          type: string
+          format: email
+          example: claudio@getnickel.com
+    PaymentLinkCreateRequest:
+      required:
+      - customerId
+      - name
+      type: object
+      properties:
+        requestedAmountCents:
+          type: integer
+          format: int64
+          example: 12055
+        name:
+          type: string
+          example: INV-123
+        dueDate:
+          type: string
+          format: date
+        customerId:
+          type: string
+    Webhook:
+      required:
+      - id
+      - url
+      type: object
+      properties:
+        url:
+          type: string
+        id:
+          type: string
+    WebhookCreateRequest:
+      required:
+      - url
+      type: object
+      properties:
+        url:
+          type: string
+    PaymentLinkUpdateRequest:
+      properties:
+        requestedAmountCents:
+          type: integer
+          format: int64
+          example: 12055
+        name:
+          type: string
+          example: INV-123
+        dueDate:
+          type: string
+          format: date
+    File:
+      required:
+      - createdAt
+      - id
+      - key
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+        key:
+          type: string
+        type:
+          type: string
+          enum:
+          - ACH_DEBIT_AUTHORIZATION_PDF
+          - INVOICE_PDF
+        createdAt:
+          type: string
+          format: date-time
+    PaymentLink:
+      required:
+      - customerId
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          example: clkqzo2y1000cx9tfohoiodq1
+        requestedAmountCents:
+          type: integer
+          format: int64
+          example: 12055
+        name:
+          type: string
+          example: INV-123
+        dueDate:
+          type: string
+          format: date
+        status:
+          type: string
+          example: ACTIVE
+        payments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Payment"
+        customerId:
+          type: string
+        url:
+          type: string
+          format: uri
+          example: https://nickel.nickelpayments.com/pay/Ahndhz
+        attachments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Attachment"
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+      xml:
+        name: "##default"
+    Error:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    file_body:
+      type: object
+      properties:
+        file:
+          type: string
+          format: binary
+        type:
+          type: string
+          enum:
+          - ACH_DEBIT_AUTHORIZATION_PDF
+          - INVOICE_PDF
+    inline_response_200:
+      type: object
+      properties:
+        webhooks:
+          type: array
+          items:
+            $ref: "#/components/schemas/Webhook"
+    paymentLinkId_uploadPdf_body:
+      type: object
+      properties:
+        fileId:
+          type: string
+    inline_response_200_1:
+      type: object
+      properties:
+        paymentLinkIds:
+          type: array
+          items:
+            type: string
+    chargeAuthorization_pay_body:
+      required:
+      - payments
+      type: object
+      properties:
+        payments:
+          type: array
+          description: Array of charges to process
+          items:
+            $ref: "#/components/schemas/ChargeAuthorizationPayment"
+    inline_response_200_2:
+      type: object
+      properties:
+        paymentLinks:
+          type: array
+          description: Successfully processed payment links
+          items:
+            $ref: "#/components/schemas/ChargeAuthorizationPaymentResult"
+        errors:
+          type: array
+          description: Payment links that failed to process
+          items:
+            $ref: "#/components/schemas/ChargeAuthorizationPaymentError"
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
