@@ -40,7 +40,6 @@ paths:
       tags:
       - File
       summary: Upload a file
-      description: Upload a file
       operationId: uploadFile
       requestBody:
         description: File Upload
@@ -60,7 +59,6 @@ paths:
       tags:
       - Webhook
       summary: Get webhooks
-      description: Get webhooks
       operationId: getWebhooks
       responses:
         "200":
@@ -85,7 +83,6 @@ paths:
       tags:
       - Webhook
       summary: Create a webhook
-      description: Create a webhook
       operationId: createWebhook
       requestBody:
         description: Create a webhook
@@ -118,7 +115,6 @@ paths:
       tags:
       - Payment Link
       summary: Create a new payment link
-      description: Create a new payment link
       operationId: addPaymentLink
       requestBody:
         description: Create a new payment link
@@ -149,7 +145,6 @@ paths:
       tags:
       - Payment Link
       summary: Find a payment link by id
-      description: Returns a single payment link
       operationId: getPaymentLinkById
       parameters:
       - name: paymentLinkId
@@ -179,7 +174,6 @@ paths:
       tags:
       - Payment Link
       summary: Update an existing payment link.
-      description: Update an existing payment link by id.
       operationId: updatePaymentLink
       parameters:
       - name: paymentLinkId
@@ -218,7 +212,6 @@ paths:
       tags:
       - Payment Link
       summary: Deletes a payment link.
-      description: Delete a payment link.
       operationId: deletePaymentLink
       parameters:
       - name: api_key
@@ -249,7 +242,6 @@ paths:
       tags:
       - Payment Link
       summary: Uploads a pdf to a payment link.
-      description: Upload pdf of a payment link.
       operationId: uploadFileToPaymentLink
       parameters:
       - name: paymentLinkId
@@ -286,7 +278,6 @@ paths:
       tags:
       - Payment Link
       summary: Return payment links by customerId
-      description: Returns a list of all payment links by Id
       operationId: getPaymentLinksByCustomerId
       parameters:
       - name: customerId
@@ -307,7 +298,6 @@ paths:
       tags:
       - Attachment
       summary: Deletes an attachment on a payment link.
-      description: Delete an attachment.
       operationId: deleteAttachment
       parameters:
       - name: attachmentId
@@ -332,7 +322,6 @@ paths:
       tags:
       - Payment
       summary: Returns a payment by id
-      description: Returns a payment by id
       operationId: getPayment
       parameters:
       - name: paymentId
@@ -359,7 +348,6 @@ paths:
       tags:
       - Disbursement
       summary: Returns a disbursement by id
-      description: Returns a disbursement by id
       operationId: getDisbursement
       parameters:
       - name: disbursementId
@@ -386,7 +374,6 @@ paths:
       tags:
       - Customer
       summary: Update a customer
-      description: Update an existing customer
       operationId: updateCustomer
       requestBody:
         description: Update an existing customer
@@ -418,7 +405,6 @@ paths:
       tags:
       - Customer
       summary: Create a customer
-      description: Create a customer
       operationId: addCustomer
       requestBody:
         description: Create a new customer
@@ -449,7 +435,6 @@ paths:
       tags:
       - Customer
       summary: Find a customer by id
-      description: Find a customer by id
       operationId: getCustomerById
       parameters:
       - name: customerId
@@ -480,7 +465,6 @@ paths:
       tags:
       - Customer
       summary: Find a customer by email
-      description: Find a customer by email
       operationId: getCustomerByEmail
       parameters:
       - name: email
@@ -512,7 +496,6 @@ paths:
       tags:
       - Customer
       summary: Upload an ACH Debit Authorization PDF
-      description: Upload an ACH Debit Authorization PDF
       operationId: Upload ACH Debit Authorization PDF
       parameters:
       - name: customerId
@@ -549,7 +532,6 @@ paths:
       tags:
       - Customer
       summary: Request  charge authorization from a customer
-      description: Request charge authorization from a customer
       operationId: requestchargeAuthorizationFromCustomer
       parameters:
       - name: customerId
@@ -586,7 +568,6 @@ paths:
       tags:
       - Charge Authorization
       summary: Returns a charge authorization by id
-      description: Returns a charge authorization by id
       operationId: getChargeAuthorization
       parameters:
       - name: chargeAuthorizationId
