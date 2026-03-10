@@ -1,97 +1,41 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: 'Introduction'
+description: 'Learn the basics of the Nickel API'
 ---
 
-## Setting up
+## API Reference
 
-Get your documentation site up and running in minutes.
+The Nickel API is organized around [REST](https://en.wikipedia.org/wiki/REST). Our API has predictable resource-oriented URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes, authentication, and verbs.
 
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
-</Card>
+## Authorization and Testing
 
-## Make it yours
+The Nickel API uses [Bearer Authentication](https://datatracker.ietf.org/doc/html/rfc6750). You will be provided with a pair of [API keys](https://dashboard.increase.com/login?redirect=developers%2Fapi_keys): one for production and one for sandbox testing.
 
-Design a docs site that looks great and empowers your users.
+| Environment | Base URL |
+| --- | --- |
+| Production | `https://rest.nickel.com` |
+| Sandbox | `https://rest.staging.nickel.com` |
 
-<Columns cols={2}>
-  <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
-  >
-    Edit your docs locally and preview them in real time.
-  </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
-  </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
-  </Card>
-  <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Auto-generate API documentation from OpenAPI specifications.
-  </Card>
-</Columns>
+Include your API key in the `Authorization` header of every request:
 
-## Create beautiful pages
+```
+Authorization: Bearer YOUR_API_KEY
+```
 
-Everything you need to create world-class documentation.
+## Requests and Responses
 
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
-  </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
-  </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
-  </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
-  </Card>
-</Columns>
+For `POST` requests, set the `Content-Type` header to `application/json` and pass parameters in the JSON request body.
 
-## Need inspiration?
+For `GET` requests, pass parameters as query string parameters in the URL.
 
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
-</Card>
+All API responses return `application/json`.
+
+## Errors
+
+The Nickel API uses standard HTTP response codes to indicate the success or failure of a request.
+
+- **2xx** — Success
+- **4xx** — Client error (invalid request, authentication failure, etc.)
+- **5xx** — Server error
+
+Error response objects conform to [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) (Problem Details for HTTP APIs). Each error is distinguished by a `type` attribute and follows a consistent shape.

@@ -1,62 +1,31 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "Nickel API Documentation",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#3A032D",
+    "light": "#9B3278",
+    "dark": "#3A032D"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/favicon.ico",
   "api": {
     "playground": {
       "display": "interactive"
     }
   },
   "navigation": {
-    "tabs": [
+    "groups": [
       {
-        "tab": "Guides",
-        "groups": [
-          {
-            "group": "Getting started",
-            "pages": ["index", "quickstart", "development"]
-          },
-          {
-            "group": "Customization",
-            "pages": ["essentials/settings", "essentials/navigation"]
-          },
-          {
-            "group": "Writing content",
-            "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
-            ]
-          },
-          {
-            "group": "AI tools",
-            "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
-            ]
-          }
+        "group": "Getting Started",
+        "pages": [
+          "index",
+          "api-reference/payments",
+          "api-reference/webhooks"
         ]
       },
       {
-        "tab": "API Reference",
-        "groups": [
-          {
-            "group": "Getting Started",
-            "pages": ["api-reference/introduction", "api-reference/payments", "api-reference/webhooks"]
-          },
-          {
-            "group": "API Reference",
-            "openapi": "/nickel-api-docs.yaml"
-          }
-        ]
+        "group": "API Reference",
+        "openapi": "/nickel-api-docs.yaml"
       }
     ],
     "global": {
@@ -75,8 +44,8 @@
     }
   },
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "/logo500.png",
+    "dark": "/logo500.png"
   },
   "navbar": {
     "links": [
