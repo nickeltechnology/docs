@@ -1,4 +1,4 @@
-openapi: 3.0.4
+openapi: 3.0.3
 info:
   title: Nickel API
   description: "This is the specification for the Nickel Rest API. The API lets you programatically interact with the Nickel server. It uses resource oriented URLs, accepts and returns JSON encoded payloads and uses standard HTTP response codes. It is not a direct API to move money, but instead allows you to interact with Nickel as you would on a web interface."
@@ -34,6 +34,8 @@ tags:
     description: Create a webhook for nickel to send updates to
   - name: File
     description: A file you can use to attach to invoices or debit authorizations
+security:
+  - bearerAuth: []
 paths:
   /file:
     post:
@@ -214,12 +216,6 @@ paths:
       summary: Deletes a payment link.
       operationId: deletePaymentLink
       parameters:
-        - name: api_key
-          in: header
-          description: ""
-          required: false
-          schema:
-            type: string
         - name: paymentLinkId
           in: path
           description: Payment link id to delete
@@ -1089,7 +1085,6 @@ components:
           items:
             $ref: "#/components/schemas/ChargeAuthorizationPaymentError"
   securitySchemes:
-    api_key:
-      type: apiKey
-      name: api_key
-      in: header
+    bearerAuth:
+      type: http
+      scheme: bearer
