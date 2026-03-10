@@ -13,10 +13,8 @@ externalDocs:
   description: Find out more about Nickel
   url: https://getnickel.com
 servers:
-  - url: https://virtserver.swaggerhub.com/nickel-ace/apiv1/1.0.0
-    description: SwaggerHub API Auto Mocking
-  - url: https://rest.nickel.com
   - url: https://rest.staging.nickel.com
+    description: Sandbox / Staging
 tags:
   - name: Payment
     description: Payments from your customers to you
