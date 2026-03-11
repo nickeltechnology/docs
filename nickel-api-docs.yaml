@@ -32,6 +32,16 @@ tags:
     description: Create a webhook for nickel to send updates to
   - name: File
     description: A file you can use to attach to invoices or debit authorizations
+  - name: Vendor
+    description: Manage vendors for accounts payable
+  - name: Bill
+    description: Bills from vendors
+  - name: Bill Payment
+    description: Payments against vendor bills
+  - name: Vendor Payout
+    description: Settlements to vendors
+  - name: Vendor Payout Method
+    description: Vendor bank account and delivery method management
 security:
   - bearerAuth: []
 paths:
@@ -613,6 +623,600 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /vendor:
+    get:
+      tags:
+        - Vendor
+      summary: List vendors
+      operationId: listVendors
+      parameters:
+        - name: page
+          in: query
+          description: Page number for pagination
+          required: false
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          description: Number of results per page
+          required: false
+          schema:
+            type: integer
+        - name: vendorName
+          in: query
+          description: Filter vendors by name
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VendorListResponse"
+        "400":
+          description: Invalid input
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      tags:
+        - Vendor
+      summary: Create a vendor
+      operationId: createVendor
+      requestBody:
+        description: Create a new vendor
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VendorCreateRequest"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vendor"
+        "400":
+          description: Invalid input
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /vendor/{vendorId}:
+    get:
+      tags:
+        - Vendor
+      summary: Get a vendor by ID
+      operationId: getVendor
+      parameters:
+        - name: vendorId
+          in: path
+          description: ID of the vendor
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vendor"
+        "404":
+          description: Vendor not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      tags:
+        - Vendor
+      summary: Update a vendor
+      operationId: updateVendor
+      parameters:
+        - name: vendorId
+          in: path
+          description: ID of the vendor to update
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update an existing vendor
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VendorUpdateRequest"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vendor"
+        "400":
+          description: Invalid input
+        "404":
+          description: Vendor not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      tags:
+        - Vendor
+      summary: Delete a vendor
+      operationId: deleteVendor
+      parameters:
+        - name: vendorId
+          in: path
+          description: ID of the vendor to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Vendor deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+        "400":
+          description: Invalid input
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /vendor/{vendorId}/payoutMethod/ach:
+    put:
+      tags:
+        - Vendor Payout Method
+      summary: Update vendor ACH payout method
+      operationId: updateVendorACHPayoutMethod
+      parameters:
+        - name: vendorId
+          in: path
+          description: ID of the vendor
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: ACH payout method details
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VendorACHUpdateRequest"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VendorIdResponse"
+        "400":
+          description: Invalid input
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /vendor/{vendorId}/payoutMethod/check:
+    put:
+      tags:
+        - Vendor Payout Method
+      summary: Update vendor check payout method
+      operationId: updateVendorCheckPayoutMethod
+      parameters:
+        - name: vendorId
+          in: path
+          description: ID of the vendor
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Check payout method details
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VendorCheckUpdateRequest"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VendorIdResponse"
+        "400":
+          description: Invalid input
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /vendor/{vendorId}/payoutMethod/wire:
+    put:
+      tags:
+        - Vendor Payout Method
+      summary: Update vendor wire payout method
+      operationId: updateVendorWirePayoutMethod
+      parameters:
+        - name: vendorId
+          in: path
+          description: ID of the vendor
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Wire payout method details
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VendorWireUpdateRequest"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VendorIdResponse"
+        "400":
+          description: Invalid input
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /vendorPayoutMethod/{vendorPayoutMethodId}:
+    delete:
+      tags:
+        - Vendor Payout Method
+      summary: Delete a vendor payout method
+      operationId: deleteVendorPayoutMethod
+      parameters:
+        - name: vendorPayoutMethodId
+          in: path
+          description: ID of the vendor payout method to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Vendor payout method deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+        "400":
+          description: Invalid input
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /vendor/{vendorId}/requestDeliveryDetails:
+    post:
+      tags:
+        - Vendor Payout Method
+      summary: Request delivery details from a vendor
+      operationId: requestDeliveryDetails
+      parameters:
+        - name: vendorId
+          in: path
+          description: ID of the vendor
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Optional email addresses to send the request to
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RequestDeliveryDetailsRequest"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeliveryDetailsResponse"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /bill:
+    get:
+      tags:
+        - Bill
+      summary: List bills
+      operationId: listBills
+      parameters:
+        - name: page
+          in: query
+          description: Page number for pagination
+          required: false
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          description: Number of results per page
+          required: false
+          schema:
+            type: integer
+        - name: vendorName
+          in: query
+          description: Filter bills by vendor name
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BillListResponse"
+        "400":
+          description: Invalid input
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      tags:
+        - Bill
+      summary: Create a bill
+      operationId: createBill
+      requestBody:
+        description: Create a new bill
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BillCreateRequest"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bill"
+        "400":
+          description: Invalid input
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /bill/{billId}:
+    get:
+      tags:
+        - Bill
+      summary: Get a bill by ID
+      operationId: getBill
+      parameters:
+        - name: billId
+          in: path
+          description: ID of the bill
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bill"
+        "404":
+          description: Bill not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      tags:
+        - Bill
+      summary: Update a bill
+      operationId: updateBill
+      parameters:
+        - name: billId
+          in: path
+          description: ID of the bill to update
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update an existing bill
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BillUpdateRequest"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bill"
+        "400":
+          description: Invalid input
+        "404":
+          description: Bill not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      tags:
+        - Bill
+      summary: Delete a bill
+      operationId: deleteBill
+      parameters:
+        - name: billId
+          in: path
+          description: ID of the bill to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Bill deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+        "400":
+          description: Invalid input
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /billPayment:
+    post:
+      tags:
+        - Bill Payment
+      summary: Pay bills
+      description: Process payments for one or more bills in a single batch request.
+      operationId: payBill
+      requestBody:
+        description: Batch bill payment request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BillPaymentCreateRequest"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BillPaymentCreateResponse"
+        "400":
+          description: Invalid input
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /billPayment/{billPaymentId}:
+    get:
+      tags:
+        - Bill Payment
+      summary: Get a bill payment by ID
+      operationId: getBillPayment
+      parameters:
+        - name: billPaymentId
+          in: path
+          description: ID of the bill payment
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BillPayment"
+        "404":
+          description: Bill payment not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /billPayment/{billPaymentId}/cancel:
+    post:
+      tags:
+        - Bill Payment
+      summary: Cancel a bill payment
+      operationId: cancelBillPayment
+      parameters:
+        - name: billPaymentId
+          in: path
+          description: ID of the bill payment to cancel
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BillPayment"
+        "404":
+          description: Bill payment not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /vendorPayout/{vendorPayoutId}:
+    get:
+      tags:
+        - Vendor Payout
+      summary: Get a vendor payout by ID
+      operationId: getVendorPayout
+      parameters:
+        - name: vendorPayoutId
+          in: path
+          description: ID of the vendor payout
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VendorPayout"
+        "404":
+          description: Vendor payout not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
   schemas:
     Attachment:
@@ -1082,6 +1686,412 @@ components:
           description: Payment links that failed to process
           items:
             $ref: "#/components/schemas/ChargeAuthorizationPaymentError"
+    AddressDetails:
+      type: object
+      properties:
+        street1:
+          type: string
+        street2:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        zip:
+          type: string
+        country:
+          type: string
+    VendorCreateRequest:
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+        emails:
+          type: array
+          items:
+            type: string
+        address:
+          $ref: "#/components/schemas/AddressDetails"
+        type:
+          type: string
+          enum:
+            - BUSINESS
+            - INDIVIDUAL
+        syncToQbo:
+          type: boolean
+    VendorUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        emails:
+          type: array
+          items:
+            type: string
+        address:
+          $ref: "#/components/schemas/AddressDetails"
+        type:
+          type: string
+          enum:
+            - BUSINESS
+            - INDIVIDUAL
+        taxId:
+          type: string
+    VendorPayoutMethodResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          nullable: true
+        routingNumber:
+          type: string
+          nullable: true
+        accountType:
+          type: string
+          nullable: true
+        bankName:
+          type: string
+          nullable: true
+        street:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        state:
+          type: string
+          nullable: true
+        zip:
+          type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
+        swiftCode:
+          type: string
+          nullable: true
+        iban:
+          type: string
+          nullable: true
+        countryCode:
+          type: string
+          nullable: true
+    Vendor:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          nullable: true
+        emails:
+          type: array
+          items:
+            type: string
+        address:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        state:
+          type: string
+          nullable: true
+        zip:
+          type: string
+          nullable: true
+        type:
+          type: string
+          nullable: true
+        vendorPayoutMethods:
+          type: array
+          items:
+            $ref: "#/components/schemas/VendorPayoutMethodResponse"
+    VendorListResponse:
+      type: object
+      properties:
+        vendors:
+          type: array
+          items:
+            $ref: "#/components/schemas/Vendor"
+        totalResults:
+          type: integer
+    VendorACHUpdateRequest:
+      required:
+        - routingNumber
+        - accountNumber
+        - accountType
+      type: object
+      properties:
+        routingNumber:
+          type: string
+        accountNumber:
+          type: string
+        accountType:
+          type: string
+    VendorCheckUpdateRequest:
+      required:
+        - street
+        - city
+        - state
+        - zip
+      type: object
+      properties:
+        street:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        zip:
+          type: string
+        country:
+          type: string
+    VendorWireUpdateRequest:
+      required:
+        - swiftCode
+        - countryCode
+        - recipientAddress
+        - recipientCity
+        - recipientState
+        - recipientZip
+      type: object
+      properties:
+        swiftCode:
+          type: string
+        iban:
+          type: string
+        countryCode:
+          type: string
+        recipientAddress:
+          type: string
+        recipientCity:
+          type: string
+        recipientState:
+          type: string
+        recipientZip:
+          type: string
+        bankCode:
+          type: string
+        transitNumber:
+          type: string
+        canadianAccountNumber:
+          type: string
+        hongKongAccountNumber:
+          type: string
+        correspondentSwiftCode:
+          type: string
+    RequestDeliveryDetailsRequest:
+      type: object
+      properties:
+        emails:
+          type: array
+          items:
+            type: string
+    BillCreateRequest:
+      required:
+        - amountCents
+        - dueDateEpochMillis
+        - vendorId
+        - reason
+      type: object
+      properties:
+        amountCents:
+          type: integer
+          format: int64
+        dueDateEpochMillis:
+          type: integer
+          format: int64
+          description: Due date as epoch milliseconds
+        vendorId:
+          type: string
+        billNumber:
+          type: string
+        reason:
+          type: string
+        s3Urls:
+          type: array
+          items:
+            type: string
+    BillUpdateRequest:
+      type: object
+      properties:
+        internalNote:
+          type: string
+        reference:
+          type: string
+        s3Urls:
+          type: array
+          items:
+            type: string
+        amountCents:
+          type: integer
+          format: int64
+        dueDateEpochMillis:
+          type: integer
+          format: int64
+    Bill:
+      type: object
+      properties:
+        id:
+          type: string
+        amountDueInCents:
+          type: integer
+          format: int64
+          nullable: true
+        totalAmountInCents:
+          type: integer
+          format: int64
+          nullable: true
+        vendorId:
+          type: string
+          nullable: true
+        vendorName:
+          type: string
+          nullable: true
+        dueDate:
+          type: string
+          nullable: true
+        reference:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        documents:
+          type: array
+          items:
+            type: string
+    BillListResponse:
+      type: object
+      properties:
+        bills:
+          type: array
+          items:
+            $ref: "#/components/schemas/Bill"
+        totalResults:
+          type: integer
+    BatchBillPayItemInput:
+      required:
+        - billId
+        - merchantPaymentMethodId
+        - vendorPayoutMethodId
+        - notificationEmails
+        - vendorId
+      type: object
+      properties:
+        billId:
+          type: string
+        merchantPaymentMethodId:
+          type: string
+        vendorPayoutMethodId:
+          type: string
+        notificationEmails:
+          type: array
+          items:
+            type: string
+        withdrawalDateEpochMillis:
+          type: integer
+          format: int64
+        vendorId:
+          type: string
+        vendorMemo:
+          type: string
+    BillPaymentCreateRequest:
+      required:
+        - payments
+      type: object
+      properties:
+        payments:
+          type: array
+          items:
+            $ref: "#/components/schemas/BatchBillPayItemInput"
+        idempotencyKey:
+          type: string
+    BillPayment:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          nullable: true
+        amountInCents:
+          type: integer
+          format: int64
+          nullable: true
+        createdAt:
+          type: number
+          nullable: true
+        vendorPayoutMethodId:
+          type: string
+          nullable: true
+        billPayableId:
+          type: string
+    BillPaymentCreateResponse:
+      type: object
+      properties:
+        billPayments:
+          type: array
+          items:
+            $ref: "#/components/schemas/BillPayment"
+        billErrors:
+          type: array
+          items:
+            $ref: "#/components/schemas/BillPaymentError"
+    BillPaymentError:
+      type: object
+      properties:
+        billId:
+          type: string
+        error:
+          type: string
+    VendorPayout:
+      type: object
+      properties:
+        id:
+          type: string
+        amountInCents:
+          type: integer
+          format: int64
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        paidAt:
+          type: string
+          nullable: true
+        createdAt:
+          type: number
+          nullable: true
+        checkNumber:
+          type: string
+          nullable: true
+        vendorId:
+          type: string
+        vendorName:
+          type: string
+          nullable: true
+    MessageResponse:
+      type: object
+      properties:
+        message:
+          type: string
+    VendorIdResponse:
+      type: object
+      properties:
+        vendorId:
+          type: string
+    DeliveryDetailsResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          nullable: true
   securitySchemes:
     bearerAuth:
       type: http
