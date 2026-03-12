@@ -35,9 +35,7 @@ tags:
   - name: Vendor
     description: Manage vendors for accounts payable
   - name: Bill
-    description: Bills from vendors
-  - name: Bill Payment
-    description: Payments against vendor bills
+    description: Bills from vendors and bill payments
   - name: Vendor Payout
     description: Settlements to vendors
   - name: Vendor Payout Method
@@ -1104,10 +1102,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /billPayment:
+  /bill/pay:
     post:
       tags:
-        - Bill Payment
+        - Bill
       summary: Pay bills
       description: Process payments for one or more bills in a single batch request.
       operationId: payBill
@@ -1136,7 +1134,7 @@ paths:
   /billPayment/{billPaymentId}:
     get:
       tags:
-        - Bill Payment
+        - Bill
       summary: Get a bill payment by ID
       operationId: getBillPayment
       parameters:
@@ -1164,7 +1162,7 @@ paths:
   /billPayment/{billPaymentId}/cancel:
     post:
       tags:
-        - Bill Payment
+        - Bill
       summary: Cancel a bill payment
       operationId: cancelBillPayment
       parameters:
