@@ -56,6 +56,22 @@ This notification fires whenever your customer authorizes a payment method to be
 
 This notification fires whenever your customer or you delete an authorization to charge a payment method on file.
 
+### bill_payment.succeeded
+
+This notification fires when a bill payment to a vendor has been completed successfully.
+
+### bill_payment.failed
+
+This notification fires when a bill payment to a vendor has failed.
+
+### vendor_payout.paid
+
+This notification fires when a vendor payout has been settled and the funds have been sent to the vendor's delivery method.
+
+### vendor_payout.failed
+
+This notification fires when a vendor payout has failed to settle.
+
 ## Consuming Events
 
 Individual Events don't contain very much information on their own. This is by design, as the API structure can remain extremely stable and avoid difficult webhook migrations in the future as the Nickel API changes. If you need additional metadata, such as the amount of the Disbursement in the above example, make a `GET` request to the API for that information. You can use the `associated_object_type` or `category` fields to determine what resource to fetch from the API.
