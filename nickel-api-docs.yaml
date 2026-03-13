@@ -1187,34 +1187,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /vendorPayout/{vendorPayoutId}:
-    get:
-      tags:
-        - Vendor Payout
-      summary: Get a vendor payout by ID
-      operationId: getVendorPayout
-      parameters:
-        - name: vendorPayoutId
-          in: path
-          description: ID of the vendor payout
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/VendorPayout"
-        "404":
-          description: Vendor payout not found
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
 components:
   schemas:
     Attachment:
