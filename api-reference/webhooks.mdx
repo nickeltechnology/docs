@@ -64,6 +64,26 @@ This notification fires when a bill payment to a vendor has been completed succe
 
 This notification fires when a bill payment to a vendor has failed.
 
+### check.sent
+
+This notification fires when a check has been mailed to the vendor.
+
+### check.delivered
+
+This notification fires when a check has been delivered to the vendor.
+
+### check.deposited
+
+This notification fires when a check has been deposited by the vendor.
+
+### check.returned
+
+This notification fires when a check has been returned to sender.
+
+### check.failed
+
+This notification fires when a check payment has failed.
+
 ## Consuming Events
 
 Individual Events don't contain very much information on their own. This is by design, as the API structure can remain extremely stable and avoid difficult webhook migrations in the future as the Nickel API changes. If you need additional metadata, such as the amount of the Disbursement in the above example, make a `GET` request to the API for that information. You can use the `associated_object_type` or `category` fields to determine what resource to fetch from the API.
