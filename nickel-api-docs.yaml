@@ -1643,6 +1643,8 @@ components:
           description: Array of charges to process
           items:
             $ref: "#/components/schemas/ChargeAuthorizationPayment"
+        idempotencyKey:
+          type: string
     inline_response_200_2:
       type: object
       properties:
