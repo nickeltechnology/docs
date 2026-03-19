@@ -345,6 +345,39 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /payment/{paymentId}/refund:
+    post:
+      tags:
+        - Payment
+      summary: Refund a payment
+      description: Refunds a payment fully or partially. Credit card payments that have not yet settled can be voided. ACH payments can be refunded as a credit back to the payer.
+      operationId: refundPayment
+      parameters:
+        - name: paymentId
+          in: path
+          description: ID of the payment to refund
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RefundPaymentRequest"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Payment"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /disbursement/{disbursementId}:
     get:
       tags:
@@ -1593,6 +1626,20 @@ components:
           type: string
       xml:
         name: "##default"
+    RefundPaymentRequest:
+      type: object
+      required:
+        - amountCents
+      properties:
+        amountCents:
+          type: integer
+          format: int64
+          description: Amount to refund in cents. For a full refund, use the full payment amount.
+          example: 5000
+        reason:
+          type: string
+          description: Optional reason for the refund
+          example: Customer requested refund
     Error:
       required:
         - code
