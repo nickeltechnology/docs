@@ -24,8 +24,6 @@ tags:
     description: A request for payment against an invoice
   - name: Customer
     description: A customer record to request payments against
-  - name: Attachment
-    description: Attachments on a payment link
   - name: Charge Authorization
     description: An authorization for your customer to allow you to charge their payment method directly
   - name: Webhook
@@ -56,7 +54,7 @@ paths:
             schema:
               $ref: "#/components/schemas/file_body"
       responses:
-        "200":
+        "201":
           description: Successful operation
           content:
             application/json:
@@ -275,50 +273,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /paymentLink/customer/{customerId}:
-    get:
-      tags:
-        - Payment Link
-      summary: Return payment links by customerId
-      operationId: getPaymentLinksByCustomerId
-      parameters:
-        - name: customerId
-          in: path
-          description: ID of the customer
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/inline_response_200_1"
-  /attachment/{attachmentId}:
-    delete:
-      tags:
-        - Attachment
-      summary: Deletes an attachment on a payment link.
-      operationId: deleteAttachment
-      parameters:
-        - name: attachmentId
-          in: path
-          description: Attachment to delete
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Attachment deleted
-        "400":
-          description: Invalid payment link value
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
   /payment/{paymentId}:
     get:
       tags:
@@ -405,37 +359,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
   /customer:
-    put:
-      tags:
-        - Customer
-      summary: Update a customer
-      operationId: updateCustomer
-      requestBody:
-        description: Update an existing customer
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Customer"
-        required: true
-      responses:
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Customer"
-        "400":
-          description: Invalid ID supplied
-        "404":
-          description: Payment link not found
-        "422":
-          description: Validation exception
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
     post:
       tags:
         - Customer
@@ -454,7 +377,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PaymentLink"
+                $ref: "#/components/schemas/Customer"
         "400":
           description: Invalid input
         "422":
@@ -495,20 +418,25 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /customer/findByEmail:
-    get:
+    put:
       tags:
         - Customer
-      summary: Find a customer by email
-      operationId: getCustomerByEmail
+      summary: Update a customer
+      operationId: updateCustomer
       parameters:
-        - name: email
-          in: query
-          description: Email that will be used to query the customer
-          required: false
-          explode: true
+        - name: customerId
+          in: path
+          description: ID of the customer to update
+          required: true
           schema:
             type: string
+      requestBody:
+        description: Update an existing customer
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CustomerCreateRequest"
+        required: true
       responses:
         "200":
           description: Successful operation
@@ -517,7 +445,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Customer"
         "400":
-          description: Invalid input
+          description: Invalid ID supplied
+        "404":
+          description: Customer not found
         "422":
           description: Validation exception
         default:
@@ -531,7 +461,7 @@ paths:
       tags:
         - Customer
       summary: Upload an ACH Debit Authorization PDF
-      operationId: Upload ACH Debit Authorization PDF
+      operationId: uploadACHDebitAuthorizationPdf
       parameters:
         - name: customerId
           in: path
@@ -1222,20 +1152,13 @@ paths:
                 $ref: "#/components/schemas/Error"
 components:
   schemas:
-    Attachment:
-      type: object
-      properties:
-        id:
-          type: string
-        url:
-          type: string
     Fee:
       type: object
       properties:
-        feeType:
+        type:
           type: string
           example: Credit Card Fee
-        amountCents:
+        amountInCents:
           type: integer
           format: int64
           example: 290
@@ -1251,7 +1174,7 @@ components:
         refundDate:
           type: string
           format: date
-        void:
+        voided:
           type: boolean
     Disbursement:
       type: object
@@ -1275,6 +1198,12 @@ components:
           items:
             type: string
             example: clkqzo2y1000cx9tfohoiodq1
+        createdAt:
+          type: string
+          nullable: true
+        paidAt:
+          type: string
+          nullable: true
     Payment:
       type: object
       properties:
@@ -1309,6 +1238,11 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Refund"
+        createdAt:
+          type: number
+        estimatedDisbursementDate:
+          type: string
+          nullable: true
     ACHDetails:
       type: object
       properties:
@@ -1350,8 +1284,9 @@ components:
           type: string
         zip:
           type: string
-        countryCode:
+        email:
           type: string
+          nullable: true
     PaymentMethod:
       type: object
       properties:
@@ -1412,6 +1347,13 @@ components:
         expirationDate:
           type: string
           format: date
+        paymentMethodTypes:
+          type: array
+          items:
+            type: string
+            enum:
+              - ACH
+              - CREDIT_CARD
     ChargeAuthorization:
       type: object
       properties:
@@ -1421,14 +1363,19 @@ components:
           type: string
         paymentMethod:
           $ref: "#/components/schemas/PaymentMethod"
-        transactionLimitCents:
+        transactionLimitInCents:
           type: integer
           format: int64
-        expirationDate:
-          type: string
-          format: date
+          nullable: true
+        expiresAt:
+          type: integer
+          format: int64
+          nullable: true
         active:
           type: boolean
+        url:
+          type: string
+          nullable: true
     ChargeAuthorizationPaymentInput:
       required:
         - paymentLinkId
@@ -1503,10 +1450,9 @@ components:
           type: array
           items:
             type: string
+        syncToQbo:
+          type: boolean
     Customer:
-      required:
-        - email
-        - name
       type: object
       properties:
         id:
@@ -1515,14 +1461,10 @@ components:
         name:
           type: string
           example: Claudio Wilson
-        chargeAuthorizations:
+        emails:
           type: array
           items:
-            $ref: "#/components/schemas/ChargeAuthorization"
-        email:
-          type: string
-          format: email
-          example: claudio@getnickel.com
+            type: string
     PaymentLinkCreateRequest:
       required:
         - customerId
@@ -1586,6 +1528,7 @@ components:
           type: string
           enum:
             - ACH_DEBIT_AUTHORIZATION_PDF
+            - CREDIT_CARD_AUTHORIZATION_PDF
             - INVOICE_PDF
         createdAt:
           type: string
@@ -1622,10 +1565,9 @@ components:
           type: string
           format: uri
           example: https://nickel.nickelpayments.com/pay/Ahndhz
-        attachments:
-          type: array
-          items:
-            $ref: "#/components/schemas/Attachment"
+        completedAmountCents:
+          type: integer
+          format: int64
     ApiResponse:
       type: object
       properties:
@@ -1672,6 +1614,7 @@ components:
           type: string
           enum:
             - ACH_DEBIT_AUTHORIZATION_PDF
+            - CREDIT_CARD_AUTHORIZATION_PDF
             - INVOICE_PDF
     inline_response_200:
       type: object
@@ -1685,13 +1628,6 @@ components:
       properties:
         fileId:
           type: string
-    inline_response_200_1:
-      type: object
-      properties:
-        paymentLinkIds:
-          type: array
-          items:
-            type: string
     chargeAuthorization_pay_body:
       required:
         - payments
