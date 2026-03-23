@@ -415,7 +415,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Customer"
+              $ref: "#/components/schemas/CustomerCreateRequest"
         required: true
       responses:
         "200":
@@ -1491,6 +1491,17 @@ components:
           nullable: true
         error:
           type: string
+    CustomerCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        emails:
+          type: aray
+          format: email
+          items:
+            type: string
+            format: email
     Customer:
       required:
         - email
