@@ -415,7 +415,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CustomerCreateRequest"
+              $ref: "#/components/schemas/Customer"
         required: true
       responses:
         "200":
@@ -446,7 +446,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Customer"
+              $ref: "#/components/schemas/CustomerCreateRequest"
         required: true
       responses:
         "200":
@@ -1500,10 +1500,9 @@ components:
         name:
           type: string
         emails:
-          type: aray
+          type: array
           items:
             type: string
-            format: email
     Customer:
       required:
         - email
